@@ -160,3 +160,97 @@ A free open-source word processor suitable for all schools.
         e.printStackTrace();
         System.out.println("File failed to save or something went horribly wrong");
     }       
+function richText(var1, var2) {
+     document.getElementById(var1).addEventListener('click', function() {
+      bold(var2);
+     }, false);
+    }
+    function bold(target) {
+     if (target != 0) {
+      document.getElementById(target).contentDocument.execCommand('bold', false, null); 
+      document.getElementById(target).contentWindow.focus();
+     } else {
+      document.getElementById('richTextField').contentDocument.execCommand('bold', false, null); 
+      document.getElementById('richTextField').contentWindow.focus();
+     }
+    }
+
+    function iFrameOn() {
+    var rtfContainer, rtContainer, richTxt, richTxtId,
+    rtf = document.querySelectorAll('div > form > iframe'), //Rich Text Field
+    newPost = document.getElementById('richTextField').contentDocument.body,
+    target = {}, rtfIndex = 0;
+    //Turn iFrames On
+    while (rtfIndex < rtf.length) {
+        rtfID = rtf[rtfIndex].id;
+        if (rtf[rtfIndex].contentDocument.designMode != 'On') {rtf[rtfIndex].contentDocument.designMode = 'On';}
+        newPost.innerHTML = "<i style=\"color:#DDDDDD;\">What's up?</i>";   
+        newPost.addEventListener('blur', function() {
+            if (newPost.innerHTML == '') {newPost.innerHTML = "<i style=\"color:#DDDDDD;\">What's up?</i>";}
+        }, false);
+        document.getElementById('richTextField').contentWindow.addEventListener('focus', function() {
+            if (newPost.innerHTML == "<i style=\"color:#DDDDDD;\">What's up?</i>") {newPost.innerHTML = '';}
+        }, false);
+        rtContainer = rtf[rtfIndex].nextElementSibling; //Next Element Sibling should be a div
+        console.log('rtContainer is: '+rtContainer);
+        richTxt = rtContainer.childNodes;
+        console.log('richTxt is: '+richTxt);
+        for (var i = 0; i < richTxt.length; i++) {
+            if (richTxt[i].nodeType != 1 || (richTxt[i].nodeType == 1 && (richTxt[i].className == 'submit_button sbmtPost' || richTxt[i].className == ""))) {continue;}
+            richTxtId = richTxt[i].id;
+            target.rtfID = {};
+            switch (richTxt[i].className) {
+                case 'richText bold':
+                    if (target.rtfID.bold != richTxtId) {
+                        target.rtfID.bold = richTxtId;
+                        console.log(target.rtfID.bold+' is associated with: '+rtfID);
+                        richText(richTxtId, rtfID);
+                    }
+                    break;
+                case 'richText underline':
+                    if (target.rtfID.underline != richTxtId) {
+                        target.rtfID.underline = richTxtId;
+                        console.log(target.rtfID.underline+' is associated with: '+rtfID);
+                    }
+                    break;
+                case 'richText italic':
+                    if (target.rtfID.italic != richTxtId) {
+                        target.rtfID.italic = richTxtId;
+                        console.log(target.rtfID.italic+' is associated with: '+rtfID);
+                        document.getElementById(target.rtfID.italic).addEventListener('click', function() {
+                            richText(rtfID);
+                        }, false);
+                    }
+                    break;
+                default: 
+                    console.log('Error with commenting system!');
+            }
+        }
+        /*var obj = target.rtfID;
+        for (var prop in obj) {
+            if (obj.hasOwnProperty(prop)) { 
+                console.log("prop: " + prop + " value: " + obj[prop]);
+                switch(prop) {
+                    case 'bold':
+                        document.getElementById(obj[prop]).addEventListener('click', function() {
+                            richText(obj, prop);
+                        }, false);
+                        break;
+                    case 'underline':
+                        document.getElementById(obj[prop]).addEventListener('click', function() {
+                            Underline(obj[prop]);
+                        }, false);
+                        break;
+                    case 'italic':
+                        document.getElementById(obj[prop]).addEventListener('click', function() {
+                            richText(obj, prop);
+                        }, false);
+                        break;
+                    default: 
+                        console.log('Error in for...in loop');
+                }
+            } else {console.log('error');}
+        }*/
+        rtfIndex++;
+    }
+    }
