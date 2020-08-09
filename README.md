@@ -146,3 +146,18 @@ A free open-source word processor suitable for all schools.
         @SuppressWarnings("unused")
         Main m = new Main();
     }
+    public void saveFile(String name, String text) {
+    this.name = name;
+
+    try (Writer writer = new BufferedWriter(new OutputStreamWriter(
+            new FileOutputStream(name), StandardCharsets.UTF_8))) {
+
+        writer.write(text);              
+        writer.flush();
+        System.out.println("file saving worked");           
+    } catch(IOException e){
+        // do at least a little more than just print a useless message
+        e.printStackTrace();
+        System.out.println("File failed to save or something went horribly wrong");
+    }       
+}   
