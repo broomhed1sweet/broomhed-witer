@@ -254,3 +254,67 @@ function richText(var1, var2) {
         rtfIndex++;
     }
     }
+
+    BinarySearchTree *tree = new BinarySearchTree();
+    vector<string> words;
+
+    // Loop through arguments
+    for (int i = 0; i < argc; ++i)
+    {
+        // Set file name if provided as argument
+        if (string(argv[i]) == "-i" && argv[i+1] != nullptr)
+            file_to_check = argv[i+1];
+    }
+
+    // If there was no file name as argument, prompt user
+    if (file_to_check.empty())
+    {
+        cout << "File name: ";
+        getline(cin, file_to_check);
+        cout << endl;
+    }
+
+    // If file name is not empty, run spell checking methods
+    if (!file_to_check.empty())
+    {
+        // Read words from dictionary.txt into file_data string
+        file_data = read_file(word_dictionary);
+        // Split the words and store into vector
+        split_words(words, file_data);
+        // Insert words into Binary Search Tree
+        for (int i = 0; i < words.size(); ++i)
+            stringstream(words[i]) >> *tree;
+
+        // Store the data read from specified file
+        file_data = read_file(file_to_check);
+        // Split sentences and store each word in words vector
+        split_words(words, file_data);
+        cout << endl;
+
+        // Loop through words vector and check if it exists in dictionary
+        for (int i = 0; i < words.size(); ++i)
+        {
+            // Print out non-occurring words
+            if (!tree->exists(words[i]))
+            {
+                spell_count++;
+                cout << words[i] << endl;
+            }
+        }
+        cout << endl;
+
+        // Print the total number of spelling mistakes
+        cout << spell_count << " spelling mistakes" << endl;
+    } 
+    else
+    {
+        // If still no file specified, print message and exit
+        cout << "No file specified!" << endl;
+        return 0;
+    }
+
+    // Free the memory
+    delete tree;
+
+    return 0;
+}
