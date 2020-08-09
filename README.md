@@ -48,18 +48,10 @@ A free open-source word processor suitable for all schools.
     FileOutputStream fout = null;
     StringBuilder sb = new StringBuilder(4096);
 
-    int count = 0;
-    public void loadFile(File fileName){
-        this.file = fileName;
-        try{
-            fis = new FileInputStream(file);
-
-            while ((counter = fis.read()) != -1) {
-
-                System.out.print((char) counter);
-
-                sb.append((char) counter);
-
+        fis = new FileInputStream(file);
+        while ((counter = fis.read()) != -1) {
+            System.out.print((char) counter);
+            sb.append((char) counter);
             }
 
         }
